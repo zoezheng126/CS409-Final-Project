@@ -12,7 +12,7 @@ with open('pokemon.csv') as csv_file:
             line_count += 1
         else:
             data = {
-                    "id": row[0],
+                    "pokemon_id": row[0],
                     "identifier": row[1],
                     "species_id": row[2],
                     "height": row[3],

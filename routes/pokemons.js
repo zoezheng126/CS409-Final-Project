@@ -29,7 +29,7 @@ module.exports = function(router) {
 
     pokemonsRoute.post(function(req,res) {
         var pokemon = new Pokemon();
-        pokemon.id = req.body.id;
+        pokemon.pokemon_id = req.body.pokemon_id;
         pokemon.identifier = req.body.identifier;
         pokemon.species_id = req.body.species_id;
         pokemon.height = req.body.height;

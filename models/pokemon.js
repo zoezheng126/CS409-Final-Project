@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 // Define our user schema
 var pokemonSchema = new mongoose.Schema({
-    id: {type: String, required: true},
+    pokemon_id: {type: String},
     identifier : {type: String},
     species_id: {type: Number},
     height: {type: Number},
