@@ -6,7 +6,7 @@ var UserSchema = new mongoose.Schema({
     name: {type: String, required: true},
     password: {type: String, required: true},
     ownedPokemons: [String],
-    dateCreated: {type: Number},
+    dateCreated: {type: Date, default: Date.now}
 });
 
 // Export the Mongoose model
