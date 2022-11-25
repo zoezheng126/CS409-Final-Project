@@ -1,5 +1,6 @@
 var User = require('../models/user.js');
 var Pokemon = require('../models/pokemon.js');
+const pokemon = require('../models/pokemon.js');
 
 module.exports = function (router) {
     var userRoute = router.route('/users');
@@ -48,28 +49,22 @@ module.exports = function (router) {
                 user.password = req.body.password;
                 user.ownedPokemons = [];
 
-                var promises = [];
                 if (req.body.ownedPokemons && req.body.ownedPokemons !== undefined) {
-                    req.body.ownedPokemons.forEach((id) => {
-                        var pokemon = Pokemon.findById(id); //找不到id 我操我操 气死我了
-                        if (pokemon != null) {
-                            promises.push(pokemon);
-                        }
+                    req.body.ownedPokemons.forEach(async (id) => {
+                        Pokemon.findById(id)
+                        .then(async found => {
+                            console.log(found.id);
+                            user.ownedPokemons.push(found._id);
+                        });
                     })
                 }
 
-                Promise.all(promises)
-                .then(pokemon_ => {
-                    pokemon_.forEach(function (pokemon) {
-                        user.ownedPokemons.push(pokemon.id);
-                    });
-                });
-
                 user.save()
-                
-                return res.status(201).send({
-                    message: 'created',
-                    data: user
+                .then(next => {
+                    return res.status(201).send({
+                        message: 'created',
+                        data: user
+                    });
                 });
             }
         })
@@ -80,64 +75,6 @@ module.exports = function (router) {
             });
         });
     });
-
-    // userRoute.post(function(req, res) {
-	// 	var tmpUser = new User();
-    //     if (req.body.name === undefined) {
-    //         return res.status(500).send({
-    //             message: 'The user without a name',
-    //             data: []
-    //         });
-    //     }
-    //     if (req.body.password === undefined) {
-    //         return res.status(500).send({
-    //             message: 'The user without an password',
-    //             data: []
-    //         });
-    //     }
-	// 	User.findOne({name: req.body.name}).exec()
-	// 	.then((existUser) => {
-	// 		if(existUser === null) {
-    //             tmpUser.name = req.body.name;
-    //             tmpUser.password = req.body.password;
-    //             if (req.body.ownedPokemons === undefined || req.body.ownedPokemons === []) {
-    //                 tmpUser.ownedPokemons = [];
-    //                 tmpUser.save()
-    //                 .then((user)=> {
-    //                     return res.status(200).send({
-    //                         message: 'User created',
-    //                         data: user
-    //                     });
-    //                 });
-    //             } else {    
-    //                 var PokeArray = []
-    //                 req.body.ownedPokemons.forEach((pokeId) => {
-    //                     Pokemon.findById(new ObjectId(pokeId)).exec()
-    //                     .then((Id)=>{
-    //                         PokeArray.push(Id)
-    //                     });    
-    //                 }); 
-    //                 tmpUser.ownedPokemons = PokeArray;
-    //                 tmpUser.save()
-                    
-    //                 return res.status(200).send({
-    //                     message: 'User created with ownedPokemons',
-    //                     data: tmpUser
-    //                 });
-                    
-    //             }
-	// 		}
-	// 		else {
-    //             return res.status(500).send({
-    //                 message: 'The username already exists', 
-    //                 data: []
-    //             });
-    //         }
- 	// 	})
-	// 	.catch((err) => {
-	// 		return res.status(500).send({message: 'Server error', data: []});
-	// 	});
-	// });
 
     return router;
 }
