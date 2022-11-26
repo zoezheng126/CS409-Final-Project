@@ -38,7 +38,7 @@ module.exports = function (router) {
         }
 
         User.findOne({name: req.body.name})
-        .then(function (found) {
+        .then(async function (found) {
             if (found) {
                 return res.status(400).send({
                     message: 'username already exists',
@@ -47,35 +47,32 @@ module.exports = function (router) {
             } else {
                 user.name = req.body.name;
                 user.password = req.body.password;
-                var promises = []
+                user.ownedPokemons = [];
 
                 if (req.body.ownedPokemons && req.body.ownedPokemons !== undefined) {
                     req.body.ownedPokemons.forEach(async (id) => {
-                        Pokemon.findById(id).exec()
+                        Pokemon.findById(id)
                         .then(async found => {
-                            console.log(typeof found.id);
-                            await promises.push(found._id);
+                            user.ownedPokemons.push(found._id);
                         });
                     })
                 }
 
-                Promise.all(promises).forEach(async (p) => {
-                    user.ownedPokemons.push(p);
-                })
-                
-                
-                Promise.all(user.ownedPokemons).then(()=>{
-                    user.save()
-                    .then(() => {
-                        console.log(typeof user.ownedPokemons)
-                        return res.status(201).send({
-                            message: 'created',
-                            data: user
+                user.save()
+                .then(user_ => {
+                    if (user.ownedPokemons) {
+                        User.findByIdAndUpdate(user_._id, {$addToSet: {"ownedPokemons": user.ownedPokemons}})
+                        .catch(err => {
                         });
+                    }
+                    return user_;
+                })
+                .then(user_ => {
+                    return res.status(201).send({
+                        message: 'created',
+                        data: user_
                     });
                 });
-
-                
             }
         })
         .catch(err => {
