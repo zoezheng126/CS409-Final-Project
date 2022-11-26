@@ -38,7 +38,7 @@ module.exports = function (router) {
         }
 
         User.findOne({name: req.body.name})
-        .then(function (found) {
+        .then(async function (found) {
             if (found) {
                 return res.status(400).send({
                     message: 'username already exists',
@@ -53,17 +53,24 @@ module.exports = function (router) {
                     req.body.ownedPokemons.forEach(async (id) => {
                         Pokemon.findById(id)
                         .then(async found => {
-                            console.log(found.id);
                             user.ownedPokemons.push(found._id);
                         });
                     })
                 }
 
                 user.save()
-                .then(next => {
+                .then(user_ => {
+                    if (user.ownedPokemons) {
+                        User.findByIdAndUpdate(user_._id, {$addToSet: {"ownedPokemons": user.ownedPokemons}})
+                        .catch(err => {
+                        });
+                    }
+                    return user_;
+                })
+                .then(user_ => {
                     return res.status(201).send({
                         message: 'created',
-                        data: user
+                        data: user_
                     });
                 });
             }
