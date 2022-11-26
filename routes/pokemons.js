@@ -15,7 +15,7 @@ module.exports = function(router) {
             } else {
                 return res.status(200).send({
                     message: 'OK',
-                    data: data
+                    data: data.map(s => s.id)
                 });
             }
         })
@@ -26,7 +26,7 @@ module.exports = function(router) {
             });
         });
     });
-
+    
     pokemonsRoute.post(function(req,res) {
         var pokemon = new Pokemon();
         pokemon.pokemon_id = req.body.pokemon_id;

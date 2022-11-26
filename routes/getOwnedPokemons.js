@@ -13,9 +13,15 @@ module.exports = function(router) {
                     data: []
                 });
             } else {
+                if (found['ownedPokemons'] == null || found['ownedPokemons'] == []) {
+                    return res.status(200).send({
+                        message:'the user does not have a Pokemon yet.',
+                        data: []
+                    })
+                }
                 return res.status(200).send({
                     message: 'success',
-                    data: found
+                    data: found['ownedPokemons']
                 });
             }
         })
