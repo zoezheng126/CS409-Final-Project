@@ -3,7 +3,7 @@ var Pokemon = require('../models/pokemon.js');
 
 module.exports = function(router) {
     var GeneratorRoute = router.route('/pokemonGenerator/:id');
-    //GET finished
+    //Generate a pokemon Id the user does not have
     GeneratorRoute.get(function(req, res) {
         Pokemon.find(eval("(" + req.query.where + ")")).sort(eval("(" + req.query.sort + ")")).select(eval("(" + req.query.select + ")")).skip(eval("(" + req.query.skip + ")")).limit(eval("(" + req.query.limit + ")")).exec()
         .then((data) => {
