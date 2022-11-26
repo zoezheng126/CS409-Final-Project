@@ -47,25 +47,35 @@ module.exports = function (router) {
             } else {
                 user.name = req.body.name;
                 user.password = req.body.password;
-                user.ownedPokemons = [];
+                var promises = []
 
                 if (req.body.ownedPokemons && req.body.ownedPokemons !== undefined) {
                     req.body.ownedPokemons.forEach(async (id) => {
-                        Pokemon.findById(id)
+                        Pokemon.findById(id).exec()
                         .then(async found => {
-                            console.log(found.id);
-                            user.ownedPokemons.push(found._id);
+                            console.log(typeof found.id);
+                            await promises.push(found._id);
                         });
                     })
                 }
 
-                user.save()
-                .then(next => {
-                    return res.status(201).send({
-                        message: 'created',
-                        data: user
+                Promise.all(promises).forEach(async (p) => {
+                    user.ownedPokemons.push(p);
+                })
+                
+                
+                Promise.all(user.ownedPokemons).then(()=>{
+                    user.save()
+                    .then(() => {
+                        console.log(typeof user.ownedPokemons)
+                        return res.status(201).send({
+                            message: 'created',
+                            data: user
+                        });
                     });
                 });
+
+                
             }
         })
         .catch(err => {
