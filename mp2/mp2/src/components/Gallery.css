@@ -1,0 +1,17 @@
+.galleryNavBar {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.galleryNavBar button {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.galleryFont {
+    text-align: center;
+    background-color: pink;
+    color: white;
+    bottom: 5px;
+    left: 10px
+  }
