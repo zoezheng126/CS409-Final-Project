@@ -97,7 +97,7 @@ This will add pokemons in req body to the user with ':id'
 **Ex.**
 ```
 {
-    "pokemonToAdd" : [""637ded89e247184ef26d4325", "637ded89e247184ef26d4329", "637ded89e247184ef26d4327""]
+    "pokemonToAdd" : ["637ded89e247184ef26d4325", "637ded89e247184ef26d4329", "637ded89e247184ef26d4327"]
 }
 ```
 
@@ -107,6 +107,6 @@ This will delete pokemons in req body from the user with ':id'
 **Ex.**
 ```
 {
-    "pokemonToDelete" : [""637ded89e247184ef26d4325", "637ded89e247184ef26d4329", "637ded89e247184ef26d4327""]
+    "pokemonToDelete" : ["637ded89e247184ef26d4325", "637ded89e247184ef26d4329", "637ded89e247184ef26d4327"]
 }
 ```
