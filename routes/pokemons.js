@@ -15,7 +15,7 @@ module.exports = function(router) {
             } else {
                 return res.status(200).send({
                     message: 'OK',
-                    data: data.map(s => s.id)
+                    data: data
                 });
             }
         })
