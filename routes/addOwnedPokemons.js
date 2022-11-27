@@ -3,7 +3,7 @@ var Pokemon = require('../models/pokemon.js');
 const pokemon = require('../models/pokemon.js');
 
 module.exports = function (router) {
-    var addOwnedPokemonRoute = router.route('/addOwnedPokemon/:id');
+    var addOwnedPokemonRoute = router.route('/addOwnedPokemons/:id');
 
     addOwnedPokemonRoute.put(function(req, res) {
         var pokemonToAdd = req.body.pokemonToAdd;

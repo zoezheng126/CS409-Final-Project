@@ -3,7 +3,7 @@ var Pokemon = require('../models/pokemon.js');
 const pokemon = require('../models/pokemon.js');
 
 module.exports = function (router) {
-    var deleteOwnedPokemonRoute = router.route('/deleteOwnedPokemon/:id');
+    var deleteOwnedPokemonRoute = router.route('/deleteOwnedPokemons/:id');
 
     deleteOwnedPokemonRoute.delete(function(req, res) {
         var pokemonToDelete = req.body.pokemonToDelete;
