@@ -91,7 +91,10 @@ This gives a user's information
 ### 10. ```http://localhost:4000/api/users/:id [DELETE]``` 
 This delete a user
 
-### 11. ```http://localhost:4000/api/addOwnedPokemons/:id [PUT]```
+### 11. ```http://localhost:4000/api/pokemons/:id [GET]``` 
+This gives a pokemon's information 
+
+### 12. ```http://localhost:4000/api/addOwnedPokemons/:id [PUT]```
 This will add pokemons in req body to the user with ':id'
 
 **Ex.**
@@ -101,7 +104,7 @@ This will add pokemons in req body to the user with ':id'
 }
 ```
 
-### 12. ```http://localhost:4000/api/deleteOwnedPokemons/:id [DELETE]```
+### 13. ```http://localhost:4000/api/deleteOwnedPokemons/:id [DELETE]```
 This will delete pokemons in req body from the user with ':id'
 
 **Ex.**
