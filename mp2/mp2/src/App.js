@@ -36,6 +36,9 @@ function App() {
             <Route path={`/details/${pokemon.id}`} element={<Detail name={`${pokemon.name}`} id={`${pokemon.id}`}
             height={`${pokemon.height}`} weight={`${pokemon.weight}`} ability={pokemon.abilities} type={pokemon.types}/>}> </Route>
           ))}
+          {/* "Login" */}
+          {/* "My Pokemon" */}
+          {/* "Random Pokemon Generator" */}
         </Routes>
       </main>
     </BrowserRouter>
