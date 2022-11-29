@@ -2,6 +2,9 @@ import './App.css';
 import PokemonSearch from './components/Search.js'
 import Gallery from './components/Gallery.js'
 import Detail from './components/Detail';
+import Login from './components/Login.js';
+import MyPokemon from './components/MyPokemon.js';
+import RandomPokemon from './components/RandomPokemon.js';
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Axios from 'axios';
 import {useState, React, useEffect} from 'react';
@@ -32,13 +35,13 @@ function App() {
         <Routes>
           <Route path="/" element={<PokemonSearch allPokemons={allPokemons}/>} />
           <Route path="/gallery" element={<Gallery allPokemons={allPokemons}/>} />
+          <Route path="/login" element={<Login allPokemons={allPokemons}/>} />
+          <Route path="/my_pokemon" element={<MyPokemon allPokemons={allPokemons}/>} />
+          <Route path="/random" element={<RandomPokemon allPokemons={allPokemons}/>} />
           {allPokemons.map((pokemon) => (
             <Route path={`/details/${pokemon.id}`} element={<Detail name={`${pokemon.name}`} id={`${pokemon.id}`}
             height={`${pokemon.height}`} weight={`${pokemon.weight}`} ability={pokemon.abilities} type={pokemon.types}/>}> </Route>
           ))}
-          {/* "Login" */}
-          {/* "My Pokemon" */}
-          {/* "Random Pokemon Generator" */}
         </Routes>
       </main>
     </BrowserRouter>

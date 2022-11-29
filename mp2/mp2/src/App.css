@@ -4,6 +4,12 @@
   width: 100%;
 }
 
+.login {
+  position: absolute;
+  right: 30px;
+  top: 60px;
+}
+
 .searchHeader img {
   float: left;
   scale: 70%;
@@ -11,7 +17,7 @@
 
 .navbar {
   display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
+  grid-template-columns: 16.67% 16.67% 16.67% 16.67% 16.67% 16.67%;
   grid-gap: 0px;
   background-color: #e45551;
   height: 100px;
@@ -26,6 +32,16 @@
 .navbar_item2 {
   text-align: center;
   grid-column: 3/4;
+}
+
+.navbar_item3 {
+  text-align: center;
+  grid-column: 4/5;
+}
+
+.navbar_item4 {
+  text-align: center;
+  grid-column: 5/6;
 }
 
 .navbar_text {

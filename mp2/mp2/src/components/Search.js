@@ -60,24 +60,49 @@ function PokemonSearch({allPokemons}) {
     return (
         <div>
             <div className="header">
-            <img src={require('../pokeapi.png')} alt="loading"/>
+                <img src={require('../pokeapi.png')} alt="loading"/>
+
+                <div className="login">
+                    <Link to="/login">
+                        <div className="navbar_text">
+                            Login
+                        </div>
+                    </Link>
+                </div>
             </div>
 
             <div className="navbar">
-            <div className="navbar_item1">
-                <Link to="/">
-                <div className="navbar_text">
-                    Search
+                <div className="navbar_item1">
+                    <Link to="/">
+                    <div className="navbar_text">
+                        Search
+                    </div>
+                    </Link>
                 </div>
-                </Link>
-            </div>
-            <div className="navbar_item2">
-                <Link to="/gallery">
-                <div className="navbar_text">
-                    Gallery
+
+                <div className="navbar_item2">
+                    <Link to="/gallery">
+                    <div className="navbar_text">
+                        Gallery
+                    </div>
+                    </Link>
                 </div>
-                </Link>
-            </div>
+            
+                <div className="navbar_item3">
+                    <Link to="/my_pokemon">
+                    <div className="navbar_text">
+                        My Pokemon
+                    </div>
+                    </Link>
+                </div>
+
+                <div className="navbar_item4">
+                    <Link to="/random">
+                    <div className="navbar_text">
+                        Random Pokemon
+                    </div>
+                    </Link>
+                </div>
             </div>
 
             <input type="text" class="searchForm" onChange={handleInputChange} placeholder="Enter Pokemon Name..." />
