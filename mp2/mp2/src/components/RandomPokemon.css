@@ -1,0 +1,48 @@
+.randomNavBar {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.randomNavBar button {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.galleryFont {
+    text-align: center;
+    font-size: 2em  ;
+    background-color: pink;
+    color: white;
+    bottom: 5px;
+    left: 10px
+}
+
+.randomContent {
+    position: relative;
+    display: flex;
+    width: 100%;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    box-sizing: border-box;
+    margin-left: 40px;
+    gap: 10px 10px;
+}
+
+.randomElement {
+    position: relative;
+}
+
+.randomElement img {
+    width: 15em;
+    background-color: gray;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.randomImg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

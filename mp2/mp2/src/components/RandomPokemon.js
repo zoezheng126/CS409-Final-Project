@@ -8,28 +8,13 @@ function RandomPokemon({allPokemons}) {
 
     const handleFilterChange = (event) => {
         setpokemonFiltered({pokemonFiltered : allPokemons.sort((a, b) => a.id - b.id)});
-        if (event.target.value === "showAll") {
+
+        if (event.target.value === "random") {
+            const randint = Math.floor((Math.random() * 1154) + 1);
             setpokemonFiltered({pokemonFiltered :
-                allPokemons});
-        } else if (event.target.value === "1-200") {
-            setpokemonFiltered({pokemonFiltered :
-                allPokemons.slice(0,200)});
-        } else if (event.target.value === "201-400") {
-            setpokemonFiltered({pokemonFiltered :
-                allPokemons.slice(200,400)});
-        } else if (event.target.value === "401-600") {
-            setpokemonFiltered({pokemonFiltered :
-                allPokemons.slice(400,600)});
-        } else if (event.target.value === "601-800") {
-            setpokemonFiltered({pokemonFiltered :
-                allPokemons.slice(600,800)});
-        } else if (event.target.value === "801-1000") {
-            setpokemonFiltered({pokemonFiltered :
-                allPokemons.slice(800,1000)});
-        } else {
-            setpokemonFiltered({pokemonFiltered :
-                allPokemons.slice(1000,1154)});
-        }
+                allPokemons.slice(randint,randint + 1)});
+        } 
+        // @TODO: Add To My Pokemon function
     }
 
     return (
@@ -80,21 +65,16 @@ function RandomPokemon({allPokemons}) {
                 </div>
             </div>  
 
-            <div className="galleryNavBar">
-                <button type="button" value="showAll" onClick={handleFilterChange}> show all </button>
-                <button type="button" value="1-200" onClick={handleFilterChange}> 1-200 </button>
-                <button type="button" value="201-400" onClick={handleFilterChange}> 201-400 </button>
-                <button type="button" value="401-600" onClick={handleFilterChange}> 401-600 </button>
-                <button type="button" value="601-800" onClick={handleFilterChange}> 601-800 </button>
-                <button type="button" value="801-1000" onClick={handleFilterChange}> 801-1000 </button>
-                <button type="button" value="1001-1154" onClick={handleFilterChange}> 1001-1154 </button>
+            <div className="randomNavBar">
+                <button type="button" value="random" onClick={handleFilterChange}> Generate Random Pokemon </button>
+                <button type="button" value="" onClick={handleFilterChange}> Add To My Pokemon </button>
             </div>
 
-            <div className="searchContent">
+            <div className="randomContent">
                 {pokemonFiltered.length !== 0 ? (
                     (pokemonFiltered["pokemonFiltered"]).map((pokemon) => (
                         <Link to = {`/details/${pokemon.id}`}>
-                            <div key={pokemon.id} className="searchElement">
+                            <div key={pokemon.id} className="randomElement">
                                 <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`} alt="loading"/>
                                 <div className="galleryFont"> {pokemon.name} </div>
                             </div>
