@@ -1,116 +1,209 @@
 import './Login.css';
-import {Link} from "react-router-dom";
-import {useState, React} from 'react';
-import PropTypes from 'prop-types';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import cookie from 'react-cookies';
+import { Link } from "react-router-dom";
+import { BACK_END } from '../App'
+import * as React from 'react';
 
-function Login({allPokemons}) {
-    const [pokemonFiltered, setpokemonFiltered] = useState([]);
 
-    const handleFilterChange = (event) => {
-        setpokemonFiltered({pokemonFiltered : allPokemons.sort((a, b) => a.id - b.id)});
-        if (event.target.value === "showAll") {
-            setpokemonFiltered({pokemonFiltered :
-                allPokemons});
-        } else if (event.target.value === "1-200") {
-            setpokemonFiltered({pokemonFiltered :
-                allPokemons.slice(0,200)});
-        } else if (event.target.value === "201-400") {
-            setpokemonFiltered({pokemonFiltered :
-                allPokemons.slice(200,400)});
-        } else if (event.target.value === "401-600") {
-            setpokemonFiltered({pokemonFiltered :
-                allPokemons.slice(400,600)});
-        } else if (event.target.value === "601-800") {
-            setpokemonFiltered({pokemonFiltered :
-                allPokemons.slice(600,800)});
-        } else if (event.target.value === "801-1000") {
-            setpokemonFiltered({pokemonFiltered :
-                allPokemons.slice(800,1000)});
-        } else {
-            setpokemonFiltered({pokemonFiltered :
-                allPokemons.slice(1000,1154)});
+export const getLoginUser = () => { return cookie.load('userInfo'); };
+
+export const login = (uname) => { cookie.save('userInfo', { uname }, { path: '/', maxAge: 3600 }); };
+
+export const logout = () => { console.log("Logout"); cookie.remove('userInfo'); };
+
+class Login extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { login: false, uname: "", password: "" };
+  }
+
+  handleUserSubmit = (event) => {
+    const uname = document.getElementById("uname").value;
+    const pwd = document.getElementById("pwd").value;
+    fetch(BACK_END + `/api/users?where={"name":"${uname}"}`, {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }).then(res => res.json()).then(json => {
+      let data = json['data'];
+      if (data.length == 0) {
+        console.warn("No such user! Please Sign up first");
+        alert("No such user! Please Sign up first");
+      } else {
+        for (let i = 0; i < data.length; i++) {
+          if (data[i]['password'] == pwd) {
+            this.setState({ login: true, uname: uname });
+            login(uname);
+            this.props.onChangeLogin();
+            console.log("Login Successfully");
+            return;
+          }
         }
-    }
+        alert("Wrong Password! Please Enter again");
+      }
+    }).catch(err => {
+      console.log(err);
+    })
+    event.preventDefault();
+  };
 
+  render() {
     return (
-        <div>
-            <div className="header">
-                <img src={require('../pokeapi.png')} alt="loading"/>
-
-                <div className="login">
-                    <Link to="/login">
-                        <div className="navbar_text">
-                            Login
-                        </div>
-                    </Link>
-                </div>
+      <Container fluid>
+        <Row><br /></Row>
+        <Row><br /></Row>
+        <Row><br /></Row>
+        <Row><br /></Row>
+        <Row><br /></Row>
+        <Row>
+          <Col></Col>
+          <Col>
+            <div className="bg-light border" style={{ textAlign: "center", minWidth: "280px" }}>
+              <br />
+              Username: &nbsp;
+              <input type="text" name="uname" id="uname" />
+              <br /><br />
             </div>
-
-            <div className="navbar">
-                <div className="navbar_item1">
-                    <Link to="/">
-                    <div className="navbar_text">
-                        Search
-                    </div>
-                    </Link>
-                </div>
-
-                <div className="navbar_item2">
-                    <Link to="/gallery">
-                    <div className="navbar_text">
-                        Gallery
-                    </div>
-                    </Link>
-                </div>
-            
-                <div className="navbar_item3">
-                    <Link to="/my_pokemon">
-                        <div className="navbar_text">
-                            My Pokemon
-                        </div>
-                    </Link>
-                </div>
-
-                <div className="navbar_item4">
-                    <Link to="/random">
-                        <div className="navbar_text">
-                            Random Pokemon
-                        </div>
-                    </Link>
-                </div>
+          </Col>
+          <Col></Col>
+        </Row>
+        <Row>
+          <Col></Col>
+          <Col>
+            <div className="border" style={{ textAlign: "center", minWidth: "280px" }}>
+              <br />
+              Password: &nbsp;
+              <input type="password" name="pwd" id="pwd" />
+              <br /><br />
             </div>
-
-            <div className="galleryNavBar">
-                <button type="button" value="showAll" onClick={handleFilterChange}> show all </button>
-                <button type="button" value="1-200" onClick={handleFilterChange}> 1-200 </button>
-                <button type="button" value="201-400" onClick={handleFilterChange}> 201-400 </button>
-                <button type="button" value="401-600" onClick={handleFilterChange}> 401-600 </button>
-                <button type="button" value="601-800" onClick={handleFilterChange}> 601-800 </button>
-                <button type="button" value="801-1000" onClick={handleFilterChange}> 801-1000 </button>
-                <button type="button" value="1001-1154" onClick={handleFilterChange}> 1001-1154 </button>
+          </Col>
+          <Col></Col>
+        </Row>
+        <Row>
+          <Col></Col>
+          <Col>
+            <div className="bg-light border" style={{ textAlign: "center", minWidth: "280px" }}>
+              <br />
+              <Button type='submit' onClick={this.handleUserSubmit} variant="success">&nbsp;&nbsp;Login&nbsp;&nbsp;</Button>
+              <br /><br />
             </div>
-
-            <div className="searchContent">
-                {pokemonFiltered.length !== 0 ? (
-                    (pokemonFiltered["pokemonFiltered"]).map((pokemon) => (
-                        <Link to = {`/details/${pokemon.id}`}>
-                            <div key={pokemon.id} className="searchElement">
-                                <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`} alt="loading"/>
-                                <div className="galleryFont"> {pokemon.name} </div>
-                            </div>
-                        </Link>
-                    ))
-                ) : (
-                    <div> </div>
-                )}
+          </Col>
+          <Col></Col>
+        </Row>
+        <Row>
+          <Col></Col>
+          <Col>
+            <div className="bg-light border" style={{ textAlign: "center", minWidth: "280px" }}>
+              <br />
+              <Link to='/signup'>
+                <Button type='submit' variant="success">&nbsp;&nbsp;Sign Up&nbsp;&nbsp;</Button>
+              </Link>
+              <br /><br />
             </div>
-
-        </div>
-    );
+          </Col>
+          <Col></Col>
+        </Row>
+      </Container>
+    )
+  }
 }
 
-Login.propTypes = {
-    allPokemons: PropTypes.array
+
+class Signup extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { login: false, uname: "", password: "" };
+  }
+
+  handleSignup = (event) => {
+    const uname = document.getElementById("uname").value;
+    const pwd = document.getElementById("pwd").value;
+    fetch(BACK_END + `/api/users`, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: uname,
+        password: pwd,
+        ownedPokemons: []
+      })
+    }).then(res => res.json()).then(json => {
+      let message = json['message'];
+      if (message != "created") {
+        alert(message);
+        return;
+      } else {
+        alert(`User ${uname} has been created! Please Login`)
+      }
+    }).catch(err => {
+      console.log(err);
+    })
+  };
+
+  render() {
+    return (
+      <Container fluid>
+        <Row><br /></Row>
+        <Row><br /></Row>
+        <Row><br /></Row>
+        <Row><br /></Row>
+        <Row><br /></Row>
+        <Row>
+          <Col></Col>
+          <Col>
+            <div className="bg-light border col-md-offset-3" style={{ textAlign: "center", minWidth: "280px" }}>
+              <br />
+              Username: &nbsp;
+              <input type="text" name="uname" id="uname" />
+              <br /><br />
+            </div>
+          </Col>
+          <Col></Col>
+        </Row>
+        <Row>
+          <Col></Col>
+          <Col>
+            <div className="border" style={{ textAlign: "center", minWidth: "280px" }}>
+              <br />
+              Password: &nbsp;
+              <input type="password" name="pwd" id="pwd" />
+              <br /><br />
+            </div>
+          </Col>
+          <Col></Col>
+        </Row>
+        <Row>
+          <Col></Col>
+          <Col>
+            <div className="bg-light border" style={{ textAlign: "center", minWidth: "280px" }}>
+              <br />
+              <Button type='submit' variant="success" onClick={this.handleSignup}>&nbsp;&nbsp;Sign Up&nbsp;&nbsp;</Button>
+              <br /><br />
+            </div>
+          </Col>
+          <Col></Col>
+        </Row>
+        <Row>
+          <Col></Col>
+          <Col>
+            <div className="bg-light border" style={{ textAlign: "center", minWidth: "280px" }}>
+              <br />
+              <Link to='/login'>
+                <Button type='submit' variant="success">&nbsp;&nbsp;Login&nbsp;&nbsp;</Button>
+              </Link>
+              <br /><br />
+            </div>
+          </Col>
+          <Col></Col>
+        </Row>
+      </Container>
+    )
+  }
 }
 
-export default Login;
+export { Login, Signup };
