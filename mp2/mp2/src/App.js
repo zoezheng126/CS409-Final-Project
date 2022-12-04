@@ -3,12 +3,12 @@ import PokemonSearch from './components/Search.js'
 import Gallery from './components/Gallery.js'
 import { getLoginUser as getLoginUser, Login, Signup } from './components/Login';
 import Detail from './components/Detail';
-import Login from './components/Login.js';
 import MyPokemon from './components/MyPokemon.js';
 import RandomPokemon from './components/RandomPokemon.js';
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Axios from 'axios';
 import {useState, React, useEffect} from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
 
 
 export const BACK_END = 'http://localhost:4000'
