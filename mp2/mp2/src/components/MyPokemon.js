@@ -2,9 +2,10 @@ import './MyPokemon.css';
 import { Link } from "react-router-dom";
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button'
-import { getLoginUser, logout } from './Login'
+import { getLoginUser, logout, login } from './Login'
 import { useState, React } from 'react';
 import PropTypes from 'prop-types';
+import { BACK_END } from '../App'
 
 function MyPokemon({ allPokemons }) {
     const [pokemonFiltered, setpokemonFiltered] = useState([]);
@@ -14,41 +15,50 @@ function MyPokemon({ allPokemons }) {
     const handleFilterChange = (event) => {
         setpokemonFiltered({ pokemonFiltered: allPokemons.sort((a, b) => a.id - b.id) });
         if (event.target.value === "showAll") {
-            setpokemonFiltered({
-                pokemonFiltered:
-                    allPokemons
-            });
-        } else if (event.target.value === "1-200") {
-            setpokemonFiltered({
-                pokemonFiltered:
-                    allPokemons.slice(0, 200)
-            });
-        } else if (event.target.value === "201-400") {
-            setpokemonFiltered({
-                pokemonFiltered:
-                    allPokemons.slice(200, 400)
-            });
-        } else if (event.target.value === "401-600") {
-            setpokemonFiltered({
-                pokemonFiltered:
-                    allPokemons.slice(400, 600)
-            });
-        } else if (event.target.value === "601-800") {
-            setpokemonFiltered({
-                pokemonFiltered:
-                    allPokemons.slice(600, 800)
-            });
-        } else if (event.target.value === "801-1000") {
-            setpokemonFiltered({
-                pokemonFiltered:
-                    allPokemons.slice(800, 1000)
-            });
-        } else {
-            setpokemonFiltered({
-                pokemonFiltered:
-                    allPokemons.slice(1000, 1154)
-            });
-        }
+            // not sure how to get login so i will use user id for now
+            var user_db_id = '638d6c8c12e0010c61205c6a';
+
+            var pokemon_data;
+            fetch(BACK_END + `/api/pokemons`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).then(res => res.json()).then(json => {
+                pokemon_data = json['data'];
+                
+                fetch(BACK_END + `/api/pokemons/getOwnedPokemons/${user_db_id}`, {
+                    method: "GET",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                }).then(res1 => res1.json()).then(json1 => {
+                    let to_splice = []
+                    let pokemon_to_show = json1['data'];
+
+                    for (let i = 0; i < pokemon_to_show.length; i++) {
+                        for (let j = 0; j < pokemon_data.length; j++) {
+                            if (pokemon_data[j]["_id"] == pokemon_to_show[i]) {
+                                to_splice.push(pokemon_data[j]["pokemon_id"]);
+                            }
+                        }
+                    }
+
+                    function filterPokemon(num) {
+                        return to_splice.includes(num.id.toString());
+                    }
+
+                    setpokemonFiltered({
+                        pokemonFiltered:
+                        allPokemons.filter(filterPokemon)
+                    });
+                }).catch(err => {
+                    console.log(err);
+                })
+            }).catch(err => {
+                console.log(err);
+            })
+        } 
     }
 
     return (
@@ -109,12 +119,6 @@ function MyPokemon({ allPokemons }) {
 
             <div className="galleryNavBar">
                 <button type="button" value="showAll" onClick={handleFilterChange}> show all </button>
-                <button type="button" value="1-200" onClick={handleFilterChange}> 1-200 </button>
-                <button type="button" value="201-400" onClick={handleFilterChange}> 201-400 </button>
-                <button type="button" value="401-600" onClick={handleFilterChange}> 401-600 </button>
-                <button type="button" value="601-800" onClick={handleFilterChange}> 601-800 </button>
-                <button type="button" value="801-1000" onClick={handleFilterChange}> 801-1000 </button>
-                <button type="button" value="1001-1154" onClick={handleFilterChange}> 1001-1154 </button>
             </div>
 
             <div className="searchContent">

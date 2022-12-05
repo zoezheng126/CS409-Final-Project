@@ -5,6 +5,9 @@ import Button from 'react-bootstrap/Button'
 import { getLoginUser, logout } from './Login'
 import { useState, React } from 'react';
 import PropTypes from 'prop-types';
+import { BACK_END } from '../App'
+
+var random_pokemon_id = 0;
 
 function RandomPokemon({ allPokemons }) {
     const [pokemonFiltered, setpokemonFiltered] = useState([]);
@@ -14,14 +17,45 @@ function RandomPokemon({ allPokemons }) {
     const handleFilterChange = (event) => {
         setpokemonFiltered({ pokemonFiltered: allPokemons.sort((a, b) => a.id - b.id) });
 
+        var user_db_id = '638d6c8c12e0010c61205c6a';
+
         if (event.target.value === "random") {
-            const randint = Math.floor((Math.random() * 1154) + 1);
+            random_pokemon_id = Math.floor((Math.random() * 1154) + 1);
             setpokemonFiltered({
                 pokemonFiltered:
-                    allPokemons.slice(randint, randint + 1)
+                    allPokemons.slice(random_pokemon_id, random_pokemon_id + 1)
             });
+        } else if (event.target.value === "add_pokemon") {   
+            fetch(BACK_END + `/api/pokemons`, {
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).then(res => res.json()).then(json => {
+                var data = json['data'];
+                var pokemon_db_id = 0;
+
+                for (let i = 0; i < data.length; i++) {
+                    if (data[i]["pokemon_id"] == random_pokemon_id.toString()) {
+                        pokemon_db_id = data[i]["_id"];
+                        break;
+                    }
+                }
+
+                pokemon_db_id = pokemon_db_id.toString();
+                var pokemon_to_add = { "pokemonToAdd" : [pokemon_db_id]};
+                
+                fetch(BACK_END + `/api/addOwnedPokemons/${user_db_id}`, {
+                    method: "PUT",
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(pokemon_to_add),
+                }).catch(err => {
+                    console.log(err);
+                })
+            }).catch(err => {
+                console.log(err);
+            })
         }
-        // @TODO: Add To My Pokemon function
     }
 
     return (
@@ -81,7 +115,7 @@ function RandomPokemon({ allPokemons }) {
 
             <div className="randomNavBar">
                 <button type="button" value="random" onClick={handleFilterChange}> Generate Random Pokemon </button>
-                <button type="button" value="" onClick={handleFilterChange}> Add To My Pokemon </button>
+                <button value="add_pokemon" onClick={handleFilterChange}> Add To My Pokemon </button>
             </div>
 
             <div className="randomContent">
