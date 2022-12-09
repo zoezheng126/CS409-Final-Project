@@ -13,10 +13,17 @@ function MyPokemon({ allPokemons }) {
     const userLogout = () => { logout(); setLogin(false); }
 
     const handleFilterChange = (event) => {
-        setpokemonFiltered({ pokemonFiltered: allPokemons.sort((a, b) => a.id - b.id) });
+        // setpokemonFiltered({ pokemonFiltered: allPokemons.sort((a, b) => a.id - b.id) });
         if (event.target.value === "showAll") {
             // not sure how to get login so i will use user id for now
-            var user_db_id = '638d6c8c12e0010c61205c6a';
+            // var user_db_id = '638d6c8c12e0010c61205c6a';
+            const userinfo = getLoginUser()
+            if (!userinfo) {
+                console.warn("navigate to login page");
+                window.open("/login")
+                return;
+            }
+            const uid = userinfo['uid'];
 
             var pokemon_data;
             fetch(BACK_END + `/api/pokemons`, {
@@ -27,7 +34,7 @@ function MyPokemon({ allPokemons }) {
             }).then(res => res.json()).then(json => {
                 pokemon_data = json['data'];
                 
-                fetch(BACK_END + `/api/pokemons/getOwnedPokemons/${user_db_id}`, {
+                fetch(BACK_END + `/api/pokemons/getOwnedPokemons/${uid}`, {
                     method: "GET",
                     headers: {
                         'Content-Type': 'application/json'
