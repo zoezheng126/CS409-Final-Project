@@ -12,14 +12,14 @@ import * as React from 'react';
 
 export const getLoginUser = () => { return cookie.load('userInfo'); };
 
-export const login = (uname) => { cookie.save('userInfo', { uname }, { path: '/', maxAge: 3600 }); };
+export const login = (uname, uid) => { cookie.save('userInfo', { uname, uid }, { path: '/', maxAge: 3600 }); };
 
 export const logout = () => { console.log("Logout"); cookie.remove('userInfo'); };
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { login: false, uname: "", password: "" };
+    this.state = { login: false, uname: ""};
   }
 
   handleUserSubmit = (event) => {
@@ -39,7 +39,7 @@ class Login extends React.Component {
         for (let i = 0; i < data.length; i++) {
           if (data[i]['password'] == pwd) {
             this.setState({ login: true, uname: uname });
-            login(uname);
+            login(uname, data[i]["_id"]);
             this.props.onChangeLogin();
             console.log("Login Successfully");
             return;
