@@ -17,8 +17,14 @@ function RandomPokemon({ allPokemons }) {
     const handleFilterChange = (event) => {
         setpokemonFiltered({ pokemonFiltered: allPokemons.sort((a, b) => a.id - b.id) });
 
-        var user_db_id = '638d6c8c12e0010c61205c6a';
-
+        const userinfo = getLoginUser();
+        const uid = userinfo['uid'];
+        // var user_db_id = '638d6c8c12e0010c61205c6a';
+        if (!uid) {
+            console.warn("navigate to login page");
+            window.open("/login")
+            return;
+        }
         if (event.target.value === "random") {
             random_pokemon_id = Math.floor((Math.random() * 1154) + 1);
             setpokemonFiltered({
@@ -45,7 +51,7 @@ function RandomPokemon({ allPokemons }) {
                 pokemon_db_id = pokemon_db_id.toString();
                 var pokemon_to_add = { "pokemonToAdd" : [pokemon_db_id]};
                 
-                fetch(BACK_END + `/api/addOwnedPokemons/${user_db_id}`, {
+                fetch(BACK_END + `/api/addOwnedPokemons/${uid}`, {
                     method: "PUT",
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(pokemon_to_add),
