@@ -7,16 +7,17 @@ import { useState, React } from 'react';
 import PropTypes from 'prop-types';
 import { BACK_END } from '../App'
 
-var random_pokemon_id = 0;
-
+var generated_pokemon = '';
+var generated_id = '';
+var generated_name = '';
+var addornot = 0;
 function RandomPokemon({ allPokemons }) {
     const [pokemonFiltered, setpokemonFiltered] = useState([]);
     const [isLogin, setLogin] = useState(getLoginUser() !== undefined)
     const userLogout = () => { logout(); setLogin(false); }
-
-    const handleFilterChange = (event) => {
+    const handleFilterChange = async (event) => {
         setpokemonFiltered({ pokemonFiltered: allPokemons.sort((a, b) => a.id - b.id) });
-
+        
         const userinfo = getLoginUser();
         const uid = userinfo['uid'];
         // var user_db_id = '638d6c8c12e0010c61205c6a';
@@ -26,38 +27,105 @@ function RandomPokemon({ allPokemons }) {
             return;
         }
         if (event.target.value === "random") {
-            random_pokemon_id = Math.floor((Math.random() * 1154) + 1);
-            setpokemonFiltered({
-                pokemonFiltered:
-                    allPokemons.slice(random_pokemon_id, random_pokemon_id + 1)
-            });
-        } else if (event.target.value === "add_pokemon") {   
-            fetch(BACK_END + `/api/pokemons`, {
+            var res = await fetch(BACK_END+`/api/PokemonGenerator/${uid}`)
+            var jsonres = await res.json();
+            generated_pokemon = jsonres['data'];
+            console.log(generated_pokemon);
+            await fetch(BACK_END+`/api/pokemons/${generated_pokemon}`,{
                 method: "GET",
                 headers: {
                     'Content-Type': 'application/json'
-                },
-            }).then(res => res.json()).then(json => {
-                var data = json['data'];
-                var pokemon_db_id = 0;
-
-                for (let i = 0; i < data.length; i++) {
-                    if (data[i]["pokemon_id"] == random_pokemon_id.toString()) {
-                        pokemon_db_id = data[i]["_id"];
-                        break;
-                    }
-                }
-
-                pokemon_db_id = pokemon_db_id.toString();
-                var pokemon_to_add = { "pokemonToAdd" : [pokemon_db_id]};
-                
-                fetch(BACK_END + `/api/addOwnedPokemons/${uid}`, {
-                    method: "PUT",
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(pokemon_to_add),
-                }).catch(err => {
-                    console.log(err);
-                })
+                }})
+            .then(res=>res.json())
+            .then(response => {
+                generated_id = response['data']['pokemon_id']
+                generated_name = response['data']['identifier']
+                console.log(generated_id);
+            })
+            return  (
+                <div>
+                    <div className="header">
+                        <img src={require('../pokeapi.png')} alt="loading" />
+                        <div className="login">
+                            {isLogin ?
+                                <Dropdown>
+                                    <Dropdown.Toggle variant="success" id="dropdown-basic">
+                                        {getLoginUser()['uname']}
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item onClick={userLogout}>Log Out</Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown> : <Link to="/login" >
+                                    <div className="navbar_text">
+                                        <Button variant="success">Login</Button>
+                                    </div>
+                                </Link>}
+                        </div>
+                    </div>
+        
+                    <div className="navbar">
+                        <div className="navbar_item1">
+                            <Link to="/">
+                                <div className="navbar_text">
+                                    Search
+                                </div>
+                            </Link>
+                        </div>
+        
+                        <div className="navbar_item2">
+                            <Link to="/gallery">
+                                <div className="navbar_text">
+                                    Gallery
+                                </div>
+                            </Link>
+                        </div>
+        
+                        <div className="navbar_item3">
+                            <Link to="/my_pokemon">
+                                <div className="navbar_text">
+                                    My Pokemon
+                                </div>
+                            </Link>
+                        </div>
+        
+                        <div className="navbar_item4">
+                            <Link to="/random">
+                                <div className="navbar_text">
+                                    Random Pokemon
+                                </div>
+                            </Link>
+                        </div>
+                    </div>
+        
+                    <div className="randomNavBar">
+                        <button type="button" value="random" onClick={handleFilterChange}> Generate Random Pokemon </button>
+                        <button value="add_pokemon" onClick={handleFilterChange}> Add To My Pokemon </button>
+                    </div>
+        
+                    <div className="randomContent">
+                        {generated_pokemon !== '' ?(
+                            <Link to={`/details/${generated_id}`}>
+                            <div key={generated_id} className="randomElement">
+                                <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${generated_id.toString()}.png`} alt="loading" />
+                                <div className="galleryFont"> {generated_name} </div>
+                            </div>
+                            </Link>
+                        ):(
+                            <div> </div>
+                        )}   
+                    </div>
+        
+                </div>
+            );
+            
+        } else if (event.target.value === "add_pokemon") { 
+            addornot = 1;  
+            console.log(generated_pokemon)
+            var pokemon_to_add = { "pokemonToAdd" : [generated_pokemon]}; 
+            await fetch(BACK_END + `/api/addOwnedPokemons/${uid}`, {
+                method: "PUT",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(pokemon_to_add),
             }).catch(err => {
                 console.log(err);
             })
@@ -125,18 +193,16 @@ function RandomPokemon({ allPokemons }) {
             </div>
 
             <div className="randomContent">
-                {pokemonFiltered.length !== 0 ? (
-                    (pokemonFiltered["pokemonFiltered"]).map((pokemon) => (
-                        <Link to={`/details/${pokemon.id}`}>
-                            <div key={pokemon.id} className="randomElement">
-                                <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`} alt="loading" />
-                                <div className="galleryFont"> {pokemon.name} </div>
-                            </div>
-                        </Link>
-                    ))
-                ) : (
+                {generated_pokemon !== ''?(
+                    <Link to={`/details/${generated_id}`}>
+                    <div key={generated_id} className="randomElement">
+                        <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${generated_id.toString()}.png`} alt="loading" />
+                        <div className="galleryFont"> {generated_name} </div>
+                    </div>
+                    </Link>
+                ):(
                     <div> </div>
-                )}
+                )}   
             </div>
 
         </div>
