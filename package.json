@@ -8,10 +8,7 @@
   ],
   "homepage": "https://zoezheng126.github.io/CS409-Final-Project",
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
-    "start": "nodemon --exec node server.js",
-    "build": "nodemon --exec node server.js"
+    "start": "nodemon --exec node server.js"
   },
   "babel": {
     "presets": [
