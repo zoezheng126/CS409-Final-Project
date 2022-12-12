@@ -6,8 +6,12 @@
     "James Lee <jwlee11@illinois.edu>",
     "Sujay Khandekar <khandek2@illinois.edu>"
   ],
+  "homepage": "https://zoezheng126.github.io/CS409-Final-Project",
   "scripts": {
-    "start": "nodemon --exec node server.js"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "start": "nodemon --exec node server.js",
+    "build": "nodemon --exec node server.js"
   },
   "babel": {
     "presets": [
@@ -23,6 +27,10 @@
     "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "mongoose": "^5.4.18",
-    "nodemon": "^1.11.0"
+    "nodemon": "^1.11.0",
+    "react-scripts": "^5.0.1"
+  },
+  "devDependencies": {
+    "gh-pages": "^4.0.0"
   }
 }
