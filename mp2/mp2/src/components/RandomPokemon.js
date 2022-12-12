@@ -14,10 +14,8 @@ function RandomPokemon({ allPokemons }) {
     const [isLogin, setLogin] = useState(getLoginUser() !== undefined)
     const userLogout = () => { logout(); setLogin(false); }
     const handleFilterChange = async (event) => {
-        //setpokemonFiltered({ pokemonFiltered: allPokemons.sort((a, b) => a.id - b.id) });
         const userinfo = getLoginUser();
         const uid = userinfo['uid'];
-        // var user_db_id = '638d6c8c12e0010c61205c6a';
         if (!uid) {
             console.warn("navigate to login page");
             window.open("/login")
