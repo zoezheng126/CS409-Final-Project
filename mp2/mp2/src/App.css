@@ -50,3 +50,15 @@
   transform: translateY(-50%);
   color: white;
 }
+
+body, html {
+  margin:0;
+  height:100vh;
+}
+
+#parent {
+  background-image: url("https://assets.pokemon.com//assets/cms2/img/misc/virtual-backgrounds/sword-shield/pokemon-in-the-wild.png");
+  width:100%;
+  height:100vh; 
+  box-sizing:border-box;
+}

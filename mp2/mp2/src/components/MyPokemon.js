@@ -13,10 +13,7 @@ function MyPokemon({ allPokemons }) {
     const userLogout = () => { logout(); setLogin(false); }
 
     const handleFilterChange = (event) => {
-        // setpokemonFiltered({ pokemonFiltered: allPokemons.sort((a, b) => a.id - b.id) });
         if (event.target.value === "showAll") {
-            // not sure how to get login so i will use user id for now
-            // var user_db_id = '638d6c8c12e0010c61205c6a';
             const userinfo = getLoginUser()
             if (!userinfo) {
                 console.warn("navigate to login page");
@@ -69,7 +66,7 @@ function MyPokemon({ allPokemons }) {
     }
 
     return (
-        <div>
+        <div id="parent">
             <div className="header">
                 <img src={require('../pokeapi.png')} alt="loading" />
 

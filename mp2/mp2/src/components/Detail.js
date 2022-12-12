@@ -12,7 +12,7 @@ function Detail({ name, id, height, weight, ability, type }) {
     const userLogout = () => { logout(); setLogin(false); }
 
     return (
-        <div>
+        <div id="parent">
             <div className="header">
                 <img src={require('../pokeapi.png')} alt="loading" />
 
