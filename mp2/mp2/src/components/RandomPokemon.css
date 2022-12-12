@@ -30,6 +30,7 @@
 
 .randomElement {
     position: relative;
+    width: 100vw;
 }
 
 .randomElement img {
@@ -40,9 +41,9 @@
     margin-right: auto;
 }
 
-.randomImg {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.randomElement div {
+    width: 15em;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }

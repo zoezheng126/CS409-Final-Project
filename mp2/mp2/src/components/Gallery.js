@@ -52,7 +52,7 @@ function Gallery({ allPokemons }) {
     }
 
     return (
-        <div>
+        <div id="parent">
             <div className="header">
                 <img src={require('../pokeapi.png')} alt="loading" />
 
