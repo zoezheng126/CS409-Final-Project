@@ -1,7 +1,6 @@
 # API
 
-## After deploying by Heroku, the API is move to ```https://final-project-cs409.herokuapp.com/api```.
-## ```http://localhost:4000/api``` is no longer used.
+## After deploying by Heroku, the API is move to ```https://final-project-cs409.herokuapp.com/api```. ```http://localhost:4000/api``` is no longer used.
 
 
 
