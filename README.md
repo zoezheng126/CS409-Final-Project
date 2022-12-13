@@ -1,4 +1,10 @@
 # API
+
+## After deploying by Heroku, the API is move to ```https://final-project-cs409.herokuapp.com/api```.
+## ```http://localhost:4000/api``` is no longer used.
+
+
+
 Before using the API, you need to finish the following set-up:
 - Run ```npm install```, ```npm start -- --port=4000``` in the main directory
 - Connect your database in ```./config/secrets.js```
